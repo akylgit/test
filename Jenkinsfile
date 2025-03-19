@@ -1,30 +1,25 @@
-
 pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'us-east-1'  // Change to your preferred region
+        AWS_REGION = 'us-east-1'
         INSTANCE_TYPE = 't2.micro'
-        AMI_ID = 'ami-0e1bed4f06a3b463d'  // Replace with a valid AMI ID for your region
-        KEY_NAME = 'your-key-pair'  // Replace with your EC2 key pair name
-        SECURITY_GROUP = 'sg-09e7ad5da636819cb'  // Replace with a valid security group
-        SUBNET_ID = 'subnet-031b43c9db2793a81'  // Replace with a valid subnet ID
+        AMI_ID = 'ami-0e1bed4f06a3b463d'
+        KEY_NAME = 'devops-key'
+        SECURITY_GROUP = 'sg-09e7ad5da636819cb'
+        SUBNET_ID = 'subnet-031b43c9db2793a81'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/akylgit/test.git'  // Replace with your GitHub repo URL
+                git branch: 'main', url: 'https://github.com/akylgit/test.git'
             }
         }
 
         stage('Launch EC2 Instance') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('aws-access-key')  
-                AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')  
-            }
             steps {
-                script {
+                withAWS(credentials: 'aws-credentials', region: "${AWS_REGION}") {
                     sh """
                         aws ec2 run-instances --region $AWS_REGION \
                             --image-id $AMI_ID \
