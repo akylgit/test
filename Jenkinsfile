@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/akylgit/test.git'
+                git branch: 'main', url: 'https://github.com/akylgit/test.git'
             }
         }
         stage('SonarQube Analysis') {
