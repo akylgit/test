@@ -5,7 +5,7 @@ pipeline {
         AWS_REGION = 'us-east-1'
         INSTANCE_TYPE = 't2.micro'
         AMI_ID = 'ami-0e1bed4f06a3b463d'
-        KEY_NAME = 'devops-key'
+        KEY_NAME = 'devops'
         SECURITY_GROUP = 'sg-09e7ad5da636819cb'
         SUBNET_ID = 'subnet-031b43c9db2793a81'
     }
