@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -18,6 +19,10 @@ pipeline {
         }
 
         stage('Launch EC2 Instance') {
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('aws-access-key')  
+                AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')  
+            }
             steps {
                 script {
                     sh """
