@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        SONAR_AUTH_TOKEN = credentials('sonar-token')  // Retrieves token from Jenkins credentials
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -11,11 +8,8 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                    sonar-scanner \
-                    -Dsonar.login=$SONAR_AUTH_TOKEN
-                    '''
+                withSonarQubeEnv('SonarQube') { // Must match Jenkins config
+                    sh 'sonar-scanner -Dsonar.host.url=http://192.168.56.15:9000'
                 }
             }
         }
