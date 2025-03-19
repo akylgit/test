@@ -3,13 +3,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/akylgit/test.git'
+                git 'https://github.com/akylgit/test.git'
             }
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') { // Must match Jenkins config
-                    sh 'sonar-scanner -Dsonar.host.url=http://192.168.56.15:9000'
+                withSonarQubeEnv('SonarQube') { 
+                    sh """
+                    docker run --rm \
+                        -v \$(pwd):/usr/src \
+                        sonarsource/sonar-scanner-cli \
+                        -Dsonar.projectKey=test \
+                        -Dsonar.sources=/usr/src \
+                        -Dsonar.host.url=http://192.168.56.15:9000
+                    """
                 }
             }
         }
